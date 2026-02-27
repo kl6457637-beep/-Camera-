@@ -1,0 +1,100 @@
+/**
+ * 小红书风格设计系统变量
+ * 主色调：粉橙色系，温暖活泼
+ */
+
+// 主色调 - 小红书风格
+$color-primary: #FF2442;        // 小红书红
+$color-primary-light: #FF4D6D;  // 浅红
+$color-primary-dark: #E01B36;   // 深红
+
+// 辅助色
+$color-secondary: #FF6B6B;      // 珊瑚红
+$color-accent: #FFB800;         // 活力黄
+$color-success: #52C41A;        // 成功绿
+$color-warning: #FAAD14;        // 警告橙
+$color-error: #FF4D4F;          // 错误红
+
+// 中性色
+$color-white: #FFFFFF;
+$color-black: #000000;
+
+// 背景色
+$bg-primary: #F5F5F5;           // 主背景灰
+$bg-secondary: #FAFAFA;         // 次级背景
+$bg-tertiary: #F0F0F0;          // 第三背景
+$bg-white: #FFFFFF;             // 纯白背景
+$bg-pink: #FFF5F7;              // 淡粉背景
+$bg-orange: #FFF7E6;            // 淡橙背景
+
+// 文字色
+$text-primary: #333333;         // 主文字
+$text-secondary: #666666;       // 次级文字
+$text-tertiary: #999999;        // 第三文字
+$text-placeholder: #CCCCCC;     // 占位文字
+$text-white: #FFFFFF;           // 白色文字
+
+// 边框色
+$border-light: #EEEEEE;         // 浅色边框
+$border-normal: #DDDDDD;        // 常规边框
+$border-dark: #CCCCCC;          // 深色边框
+
+// 圆角系统 - 小红书风格大圆角
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-xxl: 24px;
+$radius-full: 9999px;
+
+// 间距系统
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 12px;
+$space-lg: 16px;
+$space-xl: 20px;
+$space-xxl: 24px;
+$space-3xl: 32px;
+$space-4xl: 40px;
+$space-5xl: 48px;
+
+// 阴影系统
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+$shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15);
+
+// 字体大小
+$font-xs: 20px;     // 10px
+$font-sm: 24px;     // 12px
+$font-md: 28px;     // 14px
+$font-lg: 32px;     // 16px
+$font-xl: 36px;     // 18px
+$font-xxl: 40px;    // 20px
+$font-3xl: 48px;    // 24px
+$font-4xl: 56px;    // 28px
+
+// 字体粗细
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
+// 行高
+$leading-tight: 1.25;
+$leading-normal: 1.5;
+$leading-relaxed: 1.75;
+
+// 动画时长
+$duration-fast: 0.15s;
+$duration-normal: 0.3s;
+$duration-slow: 0.5s;
+
+// z-index层级
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal: 1040;
+$z-popover: 1050;
+$z-tooltip: 1060;

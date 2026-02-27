@@ -1,0 +1,117 @@
+.privacy-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+/* 导航栏 */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+}
+
+.back-btn {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.back-btn:active {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.back-icon {
+  font-size: 40px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nav-placeholder {
+  width: 72px;
+}
+
+/* 设置区块 */
+.settings-section {
+  margin: 24px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.settings-section.danger {
+  border: 2px solid #ffccc7;
+}
+
+.section-title {
+  padding: 24px 32px 16px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 32px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item.danger-item:active {
+  background: #fff1f0;
+}
+
+.setting-info {
+  flex: 1;
+}
+
+.setting-name {
+  display: block;
+  font-size: 30px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.setting-name.danger-text {
+  color: #ff4d4f;
+}
+
+.setting-desc {
+  font-size: 24px;
+  color: #999;
+}
+
+.setting-arrow {
+  font-size: 32px;
+  color: #ccc;
+}
+
+/* 隐私政策 */
+.privacy-policy {
+  text-align: center;
+  padding: 32px;
+}
+
+.policy-text {
+  font-size: 26px;
+  color: #666;
+}

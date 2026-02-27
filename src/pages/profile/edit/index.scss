@@ -1,0 +1,192 @@
+.edit-profile-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+/* 导航栏 */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+}
+
+.back-btn {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.back-btn:active {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.back-icon {
+  font-size: 40px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.save-btn {
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 32px;
+  cursor: pointer;
+}
+
+.save-btn:active {
+  background: #fff;
+}
+
+.save-text {
+  font-size: 28px;
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+/* 头像区域 */
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+  background: #fff;
+  margin-bottom: 24px;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mask-text {
+  font-size: 24px;
+  color: #fff;
+}
+
+/* 表单区域 */
+.form-section {
+  background: #fff;
+  margin: 0 24px 24px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.form-item {
+  padding: 28px 32px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  display: block;
+  font-size: 26px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.form-input {
+  font-size: 30px;
+  color: #333;
+  height: 48px;
+}
+
+.form-textarea {
+  font-size: 30px;
+  color: #333;
+  height: 120px;
+  width: 100%;
+}
+
+.picker-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30px;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 32px;
+  color: #ccc;
+}
+
+/* 提示 */
+.tips-section {
+  text-align: center;
+  padding: 32px;
+  padding-bottom: 160px;
+}
+
+.tips-text {
+  font-size: 24px;
+  color: #999;
+}
+
+/* 底部保存按钮 */
+.bottom-save-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 24px 32px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  border-top: 2px solid #f0f0f0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.save-btn-bottom {
+  padding: 28px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+  border-radius: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.save-btn-bottom:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.save-btn-text {
+  font-size: 32px;
+  color: #fff;
+  font-weight: 600;
+}

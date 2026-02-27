@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>摄影师作品集 - 预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        /* 手机框架 */
+        .phone-frame {
+            max-width: 414px;
+            margin: 20px auto;
+            background: #fff;
+            min-height: 800px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border-radius: 40px;
+        }
+        
+        @media (max-width: 480px) {
+            .phone-frame {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+        }
+        
+        /* 页面切换 */
+        .page {
+            display: none;
+            min-height: 100%;
+            padding-bottom: 80px;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* ===== 首页样式 ===== */
+        .home-header {
+            display: flex;
+            align-items: center;
+            padding: 40px 20px 20px;
+            background: linear-gradient(135deg, #FFF5F7 0%, #FFF7E6 100%);
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-right: 16px;
+            object-fit: cover;
+        }
+        
+        .photographer-info h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .photographer-info p {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .photo-grid {
+            padding: 16px;
+            column-count: 2;
+            column-gap: 12px;
+        }
+        
+        .photo-item {
+            break-inside: avoid;
+            margin-bottom: 12px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .photo-item:nth-child(1) { animation-delay: 0.05s; }
+        .photo-item:nth-child(2) { animation-delay: 0.1s; }
+        .photo-item:nth-child(3) { animation-delay: 0.15s; }
+        .photo-item:nth-child(4) { animation-delay: 0.2s; }
+        .photo-item:nth-child(5) { animation-delay: 0.25s; }
+        .photo-item:nth-child(6) { animation-delay: 0.3s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .photo-item:active {
+            transform: scale(0.98);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            display: block;
+        }
+        
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 12px 12px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            border-radius: 0 0 16px 16px;
+        }
+        
+        .photo-title {
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        
+        .photo-tag {
+            display: inline-block;
+            background: rgba(255,36,66,0.9);
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px;
+            background: #fff;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px 20px;
+            cursor: pointer;
+        }
+        
+        .nav-item.active .nav-text {
+            color: #FF2442;
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-text {
+            font-size: 11px;
+            color: #999;
+        }
+        
+        /* ===== 详情页样式 ===== */
+        .detail-page {
+            background: #000;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .detail-image-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .detail-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 50px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .close-btn span {
+            color: #fff;
+            font-size: 20px;
+        }
+        
+        .detail-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 60px 20px 30px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .detail-title {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .detail-desc {
+            color: rgba(255,255,255,0.8);
+            font-size: 15px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .detail-style {
+            display: inline-block;
+            background: rgba(255,36,66,0.9);
+            color: #fff;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        
+        .action-bar {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+        
+        .favorite-btn {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        .favorite-btn.active {
+            background: rgba(255,36,66,0.9);
+        }
+        
+        .contact-btn {
+            background: #FF2442;
+        }
+        
+        .action-icon {
+            font-size: 20px;
+            margin-right: 6px;
+        }
+        
+        .action-text {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .heart-beat {
+            animation: heartBeat 0.4s ease-in-out;
+        }
+        
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(0.95); }
+            75% { transform: scale(1.1); }
+        }
+        
+        /* ===== 收藏页样式 ===== */
+        .favorites-header {
+            position: relative;
+            padding: 50px 20px 24px;
+            background: linear-gradient(135deg, #FFF5F7 0%, #fff 100%);
+        }
+        
+        .favorites-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        
+        .favorites-header p {
+            font-size: 15px;
+            color: #666;
+        }
+        
+        .clear-btn {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            font-size: 13px;
+            color: #FF2442;
+            cursor: pointer;
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 16px;
+        }
+        
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .empty-desc {
+            font-size: 14px;
+            color: #999;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .browse-btn {
+            padding: 14px 32px;
+            background: #FF2442;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        
+        .browse-btn span {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .style-group {
+            margin-bottom: 24px;
+            padding: 0 16px;
+        }
+        
+        .style-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .style-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .style-count {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        .style-photos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .favorite-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+        
+        .favorite-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .remove-btn span {
+            color: #fff;
+            font-size: 12px;
+        }
+        
+        .bottom-action {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: #fff;
+            padding: 16px;
+            padding-bottom: 24px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+        
+        .intent-summary {
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .intent-summary p {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        .contact-btn-large {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #FF2442 0%, #FF6B6B 100%);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        
+        .contact-btn-large:active {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+        
+        .contact-btn-large span {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+        
+        /* ===== 联系页样式 ===== */
+        .contact-page {
+            padding-bottom: 100px;
+        }
+        
+        .intent-card {
+            margin: 16px;
+            padding: 24px 20px;
+            background: linear-gradient(135deg, #FF2442 0%, #FF6B6B 100%);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(255,36,66,0.25);
+        }
+        
+        .card-header {
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            display: block;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        
+        .card-subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .intent-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item .number {
+            display: block;
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .stat-item .label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .top-styles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .top-styles span {
+            padding: 5px 14px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 13px;
+            color: #fff;
+        }
+        
+        .guide-section {
+            margin: 16px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .guide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            cursor: pointer;
+        }
+        
+        .guide-header h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .arrow {
+            font-size: 13px;
+            color: #999;
+            transition: transform 0.3s;
+        }
+        
+        .arrow.up {
+            transform: rotate(180deg);
+        }
+        
+        .guide-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+        
+        .guide-content.show {
+            max-height: 1000px;
+            padding-bottom: 20px;
+        }
+        
+        .guide-block {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .guide-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .guide-block h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #FF2442;
+            margin-bottom: 12px;
+        }
+        
+        .guide-item {
+            margin-bottom: 12px;
+        }
+        
+        .guide-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .guide-item strong {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .guide-item p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .contact-section {
+            margin: 16px;
+        }
+        
+        .wechat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .wechat-card label {
+            display: block;
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .wechat-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .wechat-id {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            font-family: monospace;
+        }
+        
+        .copy-btn {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .copy-btn:active {
+            background: #e8e8e8;
+        }
+        
+        .copy-btn span {
+            font-size: 13px;
+            color: #FF2442;
+            font-weight: 500;
+        }
+        
+        .tips-box {
+            margin-bottom: 16px;
+            padding: 14px;
+            background: #FFF5F7;
+            border-radius: 12px;
+        }
+        
+        .tips-box p {
+            font-size: 13px;
+            color: #d91b36;
+            line-height: 1.6;
+        }
+        
+        .submit-btn {
+            padding: 18px;
+            background: linear-gradient(135deg, #FF2442 0%, #FF6B6B 100%);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(255,36,66,0.25);
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+            opacity: 0.95;
+        }
+        
+        .submit-btn span {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+        }
+        
+        /* 弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            width: 80%;
+            max-width: 320px;
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            animation: scaleIn 0.3s ease;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .modal-content h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .modal-content p {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .qr-placeholder {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-placeholder .qr-text {
+            font-size: 15px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .qr-placeholder .qr-hint {
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .modal-action {
+            margin-bottom: 16px;
+        }
+        
+        .copy-large-btn {
+            padding: 14px 32px;
+            background: #FF2442;
+            border-radius: 12px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .copy-large-btn span {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .close-modal-btn span {
+            font-size: 15px;
+            color: #999;
+            cursor: pointer;
+        }
+        
+        /* ===== 管理页样式 ===== */
+        .admin-header {
+            display: flex;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .admin-tab {
+            flex: 1;
+            padding: 16px 0;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .admin-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: #FF2442;
+            border-radius: 2px;
+        }
+        
+        .admin-tab span {
+            font-size: 15px;
+            color: #999;
+        }
+        
+        .admin-tab.active span {
+            color: #FF2442;
+            font-weight: 600;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 20%;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            background: #FF2442;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .badge span {
+            font-size: 11px;
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .upload-panel, .intents-panel {
+            padding: 20px 16px;
+            display: none;
+        }
+        
+        .upload-panel.active, .intents-panel.active {
+            display: block;
+        }
+        
+        .form-section {
+            margin-bottom: 24px;
+        }
+        
+        .form-section h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        
+        .style-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .style-chip {
+            padding: 8px 18px;
+            background: #fff;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .style-chip.active {
+            background: #FF2442;
+            border-color: #FF2442;
+        }
+        
+        .style-chip span {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .style-chip.active span {
+            color: #fff;
+        }
+        
+        .upload-area {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .upload-area:active {
+            border-color: #FF2442;
+            background: #FFF5F7;
+        }
+        
+        .upload-area .plus {
+            font-size: 32px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        
+        .upload-area span:last-child {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .upload-btn-main {
+            margin-top: 32px;
+            padding: 16px;
+            background: #FF2442;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .upload-btn-main:active {
+            opacity: 0.9;
+        }
+        
+        .upload-btn-main span {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .empty-intents {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-intents .icon {
+            font-size: 60px;
+            margin-bottom: 12px;
+        }
+        
+        .empty-intents span {
+            font-size: 15px;
+            color: #999;
+        }
+        
+        .intent-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .intent-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .intent-user {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .intent-user strong {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        
+        .intent-user span {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .intent-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .intent-status.pending {
+            background: #FFF5F7;
+            color: #FF2442;
+        }
+        
+        .intent-status.contacted {
+            background: #f5f5f5;
+            color: #999;
+        }
+        
+        .intent-body {
+            margin-bottom: 12px;
+        }
+        
+        .intent-body p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .intent-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .intent-tags span {
+            padding: 4px 10px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .intent-action-btn {
+            padding: 12px;
+            background: #FF2442;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .intent-action-btn span {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 14px 24px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            z-index: 2000;
+            display: none;
+        }
+        
+        .toast.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- ===== 首页 ===== -->
+        <div id="page-home" class="page active">
+            <div class="home-header">
+                <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" alt="摄影师">
+                <div class="photographer-info">
+                    <h1>光影诗人</h1>
+                    <p>用镜头记录每一个动人瞬间</p>
+                </div>
+            </div>
+            
+            <div class="photo-grid">
+                <div class="photo-item" onclick="showDetail('复古', '在秋天的下午，捕获一束逃跑的光。')">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=600&fit=crop" alt="作品1">
+                    <div class="photo-overlay">
+                        <span class="photo-title">光影交织</span>
+                        <span class="photo-tag">复古</span>
+                    </div>
+                </div>
+                <div class="photo-item" onclick="showDetail('情绪', '你的眼神，是我见过最深的海洋。')">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=500&fit=crop" alt="作品2">
+                    <div class="photo-overlay">
+                        <span class="photo-title">深海之眸</span>
+                        <span class="photo-tag">情绪</span>
+                    </div>
+                </div>
+                <div class="photo-item" onclick="showDetail('胶片', '时间在这里慢了下来。')">
+                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&fit=crop" alt="作品3">
+                    <div class="photo-overlay">
+                        <span class="photo-title">时光慢递</span>
+                        <span class="photo-tag">胶片</span>
+                    </div>
+                </div>
+                <div class="photo-item" onclick="showDetail('私房', '在光影中寻找真实的自我。')">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=550&fit=crop" alt="作品4">
+                    <div class="photo-overlay">
+                        <span class="photo-title">镜中自我</span>
+                        <span class="photo-tag">私房</span>
+                    </div>
+                </div>
+                <div class="photo-item" onclick="showDetail('街头', '城市的脉搏，藏在每一个转角。')">
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=600&fit=crop" alt="作品5">
+                    <div class="photo-overlay">
+                        <span class="photo-title">街角故事</span>
+                        <span class="photo-tag">街头</span>
+                    </div>
+                </div>
+                <div class="photo-item" onclick="showDetail('时尚', '潮流易逝，风格永存。')">
+                    <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=650&fit=crop" alt="作品6">
+                    <div class="photo-overlay">
+                        <span class="photo-title">风尚前沿</span>
+                        <span class="photo-tag">时尚</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== 详情页 ===== -->
+        <div id="page-detail" class="page detail-page">
+            <div class="close-btn" onclick="goBack()">
+                <span>✕</span>
+            </div>
+            
+            <div class="detail-image-container">
+                <img class="detail-image" id="detail-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=1200&fit=crop" alt="详情">
+            </div>
+            
+            <div class="detail-info">
+                <h2 class="detail-title" id="detail-title">光影交织</h2>
+                <p class="detail-desc" id="detail-desc">在秋天的下午，捕获一束逃跑的光。</p>
+                <span class="detail-style" id="detail-style">复古</span>
+                
+                <div class="action-bar">
+                    <div class="action-btn favorite-btn" id="favorite-btn" onclick="toggleFavorite()">
+                        <span class="action-icon" id="heart-icon">🤍</span>
+                        <span class="action-text">心动</span>
+                    </div>
+                    <div class="action-btn contact-btn" onclick="showContact()">
+                        <span class="action-icon">📸</span>
+                        <span class="action-text">约拍</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== 收藏页 ===== -->
+        <div id="page-favorites" class="page">
+            <div class="favorites-header">
+                <h2>我的心动清单</h2>
+                <p>已收藏 <span id="fav-count">0</span> 个作品</p>
+                <span class="clear-btn" onclick="clearFavorites()">清空</span>
+            </div>
+            
+            <div id="favorites-empty" class="empty-state">
+                <div class="empty-icon">💝</div>
+                <div class="empty-title">还没有心动作品</div>
+                <div class="empty-desc">浏览作品时点击爱心图标，收藏你喜欢的风格</div>
+                <div class="browse-btn" onclick="switchPage('home')">
+                    <span>去浏览作品</span>
+                </div>
+            </div>
+            
+            <div id="favorites-content" style="display: none;">
+                <div class="style-group">
+                    <div class="style-header">
+                        <span class="style-name">复古</span>
+                        <span class="style-count">2 个作品</span>
+                    </div>
+                    <div class="style-photos" id="fav-photos">
+                        <!-- 动态插入收藏的图片 -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-action" id="fav-action" style="display: none;">
+                <div class="intent-summary">
+                    <p>你心动了 <span id="summary-count">0</span> 个作品，涵盖 <span id="summary-styles">0</span> 种风格</p>
+                </div>
+                <div class="contact-btn-large" onclick="showContact()">
+                    <span>📸</span>
+                    <span>联系摄影师</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== 联系页 ===== -->
+        <div id="page-contact" class="page contact-page">
+            <div class="intent-card">
+                <div class="card-header">
+                    <span class="card-title">你的拍摄意向</span>
+                    <span class="card-subtitle">已同步至摄影师</span>
+                </div>
+                
+                <div id="contact-empty" style="display: none; padding: 20px 0; text-align: center;">
+                    <p style="color: rgba(255,255,255,0.8);">还没有收藏作品，去浏览一下吧</p>
+                </div>
+                
+                <div id="contact-content">
+                    <div class="intent-stats">
+                        <div class="stat-item">
+                            <span class="number" id="intent-count">3</span>
+                            <span class="label">心动作品</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="number" id="intent-styles">2</span>
+                            <span class="label">风格类型</span>
+                        </div>
+                    </div>
+                    
+                    <div class="top-styles" id="intent-tags">
+                        <span>复古</span>
+                        <span>情绪</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="guide-section">
+                <div class="guide-header" onclick="toggleGuide()">
+                    <h3>📋 约拍流程说明</h3>
+                    <span class="arrow" id="guide-arrow">▼</span>
+                </div>
+                <div class="guide-content" id="guide-content">
+                    <div class="guide-block">
+                        <h4>拍摄前准备</h4>
+                        <div class="guide-item">
+                            <strong>妆造建议</strong>
+                            <p>建议模特根据拍摄风格准备相应妆容，可提前与摄影师沟通妆面要求</p>
+                        </div>
+                        <div class="guide-item">
+                            <strong>服装准备</strong>
+                            <p>通常准备2-3套服装，具体根据拍摄时长和场景数量确定</p>
+                        </div>
+                    </div>
+                    <div class="guide-block">
+                        <h4>拍摄中沟通</h4>
+                        <div class="guide-item">
+                            <strong>动作引导</strong>
+                            <p>摄影师会全程指导动作和表情，无需担心姿势问题</p>
+                        </div>
+                        <div class="guide-item">
+                            <strong>陪同政策</strong>
+                            <p>可带1位朋友陪同，但请不要干扰拍摄进程</p>
+                        </div>
+                    </div>
+                    <div class="guide-block">
+                        <h4>后期交付</h4>
+                        <div class="guide-item">
+                            <strong>精修张数</strong>
+                            <p>根据套餐不同，精修9-20张不等</p>
+                        </div>
+                        <div class="guide-item">
+                            <strong>原图交付</strong>
+                            <p>所有原图经过基础调色后全送</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-section">
+                <div class="wechat-card">
+                    <label>摄影师微信</label>
+                    <div class="wechat-info">
+                        <span class="wechat-id">PhotoArtist_2024</span>
+                        <div class="copy-btn" onclick="copyWechat()">
+                            <span>复制</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tips-box">
+                    <p>💡 建议发送："已在小程序选好风格，心动了3个作品，期待合作～"</p>
+                </div>
+                
+                <div class="submit-btn" onclick="submitIntent()">
+                    <span>确认意向并联系摄影师</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== 管理页 ===== -->
+        <div id="page-admin" class="page">
+            <div class="admin-header">
+                <div class="admin-tab active" onclick="switchAdminTab('upload')">
+                    <span>上传作品</span>
+                </div>
+                <div class="admin-tab" onclick="switchAdminTab('intents')">
+                    <span>意向反馈</span>
+                    <div class="badge" id="intent-badge" style="display: none;">
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="upload-panel active" id="upload-panel">
+                <div class="form-section">
+                    <h4>选择风格</h4>
+                    <div class="style-grid">
+                        <div class="style-chip" onclick="selectStyle(this)">
+                            <span>复古</span>
+                        </div>
+                        <div class="style-chip" onclick="selectStyle(this)">
+                            <span>私房</span>
+                        </div>
+                        <div class="style-chip" onclick="selectStyle(this)">
+                            <span>情绪</span>
+                        </div>
+                        <div class="style-chip" onclick="selectStyle(this)">
+                            <span>街头</span>
+                        </div>
+                        <div class="style-chip" onclick="selectStyle(this)">
+                            <span>胶片</span>
+                        </div>
+                        <div class="style-chip" onclick="selectStyle(this)">
+                            <span>时尚</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>选择图片</h4>
+                    <div class="upload-area" onclick="showToast('请上传图片')">
+                        <span class="plus">+</span>
+                        <span>添加图片</span>
+                    </div>
+                </div>
+                
+                <div class="upload-btn-main" onclick="showToast('上传成功', 'success')">
+                    <span>上传作品</span>
+                </div>
+            </div>
+            
+            <div class="intents-panel" id="intents-panel">
+                <div class="empty-intents">
+                    <div class="icon">📭</div>
+                    <span>还没有收到意向反馈</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav" id="bottom-nav">
+            <div class="nav-item active" onclick="switchPage('home')">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">作品</span>
+            </div>
+            <div class="nav-item" onclick="switchPage('favorites')">
+                <span class="nav-icon">❤️</span>
+                <span class="nav-text">心动</span>
+            </div>
+            <div class="nav-item" onclick="switchPage('admin')">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">管理</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 二维码弹窗 -->
+    <div class="modal-overlay" id="qr-modal">
+        <div class="modal-content">
+            <h3>很高兴遇见你</h3>
+            <p>一起创作吧 ✨</p>
+            <div class="qr-placeholder">
+                <span class="qr-text">二维码区域</span>
+                <span class="qr-hint">请上传微信二维码图片</span>
+            </div>
+            <div class="modal-action">
+                <div class="copy-large-btn" onclick="copyWechat()">
+                    <span>复制微信号</span>
+                </div>
+            </div>
+            <div class="close-modal-btn" onclick="closeModal()">
+                <span>关闭</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        // 状态管理
+        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        let currentPhoto = null;
+        let guideOpen = false;
+        
+        // 页面切换
+        function switchPage(page) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // 显示目标页面
+            document.getElementById('page-' + page).classList.add('active');
+            
+            // 更新底部导航
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+            });
+            
+            if (page === 'home') {
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
+                document.getElementById('bottom-nav').style.display = 'flex';
+            } else if (page === 'favorites') {
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+                document.getElementById('bottom-nav').style.display = 'flex';
+                updateFavoritesPage();
+            } else if (page === 'admin') {
+                document.querySelectorAll('.nav-item')[2].classList.add('active');
+                document.getElementById('bottom-nav').style.display = 'flex';
+            } else {
+                document.getElementById('bottom-nav').style.display = 'none';
+            }
+            
+            if (page === 'contact') {
+                updateContactPage();
+            }
+        }
+        
+        // 显示详情页
+        function showDetail(style, desc) {
+            currentPhoto = { style, desc };
+            document.getElementById('detail-style').textContent = style;
+            document.getElementById('detail-desc').textContent = desc;
+            
+            // 检查是否已收藏
+            const isFav = favorites.some(f => f.style === style && f.desc === desc);
+            updateFavoriteBtn(isFav);
+            
+            switchPage('detail');
+        }
+        
+        // 返回上一页
+        function goBack() {
+            switchPage('home');
+        }
+        
+        // 切换收藏状态
+        function toggleFavorite() {
+            if (!currentPhoto) return;
+            
+            const index = favorites.findIndex(f => f.style === currentPhoto.style && f.desc === currentPhoto.desc);
+            
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast('已取消心动');
+                updateFavoriteBtn(false);
+            } else {
+                favorites.push({ ...currentPhoto, id: Date.now() });
+                showToast('已添加心动', 'success');
+                updateFavoriteBtn(true);
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        
+        // 更新收藏按钮状态
+        function updateFavoriteBtn(isFav) {
+            const btn = document.getElementById('favorite-btn');
+            const icon = document.getElementById('heart-icon');
+            const text = btn.querySelector('.action-text');
+            
+            if (isFav) {
+                btn.classList.add('active');
+                icon.textContent = '❤️';
+                icon.classList.add('heart-beat');
+                text.textContent = '已心动';
+            } else {
+                btn.classList.remove('active');
+                icon.textContent = '🤍';
+                icon.classList.remove('heart-beat');
+                text.textContent = '心动';
+            }
+        }
+        
+        // 显示联系页
+        function showContact() {
+            switchPage('contact');
+        }
+        
+        // 更新收藏页面
+        function updateFavoritesPage() {
+            const count = favorites.length;
+            document.getElementById('fav-count').textContent = count;
+            document.getElementById('summary-count').textContent = count;
+            
+            if (count === 0) {
+                document.getElementById('favorites-empty').style.display = 'flex';
+                document.getElementById('favorites-content').style.display = 'none';
+                document.getElementById('fav-action').style.display = 'none';
+            } else {
+                document.getElementById('favorites-empty').style.display = 'none';
+                document.getElementById('favorites-content').style.display = 'block';
+                document.getElementById('fav-action').style.display = 'block';
+                
+                // 统计风格
+                const styles = [...new Set(favorites.map(f => f.style))];
+                document.getElementById('summary-styles').textContent = styles.length;
+                
+                // 渲染收藏图片（简化版）
+                const photosContainer = document.getElementById('fav-photos');
+                photosContainer.innerHTML = favorites.map(fav => `
+                    <div class="favorite-item">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop" alt="收藏">
+                        <div class="remove-btn" onclick="removeFavorite(${fav.id})">
+                            <span>✕</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // 移除收藏
+        function removeFavorite(id) {
+            favorites = favorites.filter(f => f.id !== id);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesPage();
+            showToast('已取消心动');
+        }
+        
+        // 清空收藏
+        function clearFavorites() {
+            if (favorites.length === 0) return;
+            if (confirm('确定要清空所有心动作品吗？')) {
+                favorites = [];
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                updateFavoritesPage();
+                showToast('已清空');
+            }
+        }
+        
+        // 更新联系页面
+        function updateContactPage() {
+            const count = favorites.length;
+            
+            if (count === 0) {
+                document.getElementById('contact-empty').style.display = 'block';
+                document.getElementById('contact-content').style.display = 'none';
+            } else {
+                document.getElementById('contact-empty').style.display = 'none';
+                document.getElementById('contact-content').style.display = 'block';
+                
+                document.getElementById('intent-count').textContent = count;
+                
+                const styles = [...new Set(favorites.map(f => f.style))];
+                document.getElementById('intent-styles').textContent = styles.length;
+                
+                const tagsContainer = document.getElementById('intent-tags');
+                tagsContainer.innerHTML = styles.map(s => `<span>${s}</span>`).join('');
+            }
+        }
+        
+        // 切换约拍流程说明
+        function toggleGuide() {
+            guideOpen = !guideOpen;
+            const content = document.getElementById('guide-content');
+            const arrow = document.getElementById('guide-arrow');
+            
+            if (guideOpen) {
+                content.classList.add('show');
+                arrow.classList.add('up');
+            } else {
+                content.classList.remove('show');
+                arrow.classList.remove('up');
+            }
+        }
+        
+        // 复制微信号
+        function copyWechat() {
+            showToast('微信号已复制', 'success');
+        }
+        
+        // 提交意向
+        function submitIntent() {
+            if (favorites.length === 0) {
+                showToast('还没有收藏作品哦');
+                return;
+            }
+            showToast('意向已同步给摄影师', 'success');
+            setTimeout(() => {
+                document.getElementById('qr-modal').classList.add('show');
+            }, 500);
+        }
+        
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('qr-modal').classList.remove('show');
+        }
+        
+        // 管理页标签切换
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            if (tab === 'upload') {
+                document.getElementById('upload-panel').classList.add('active');
+                document.getElementById('intents-panel').classList.remove('active');
+            } else {
+                document.getElementById('upload-panel').classList.remove('active');
+                document.getElementById('intents-panel').classList.add('active');
+            }
+        }
+        
+        // 选择风格
+        function selectStyle(el) {
+            document.querySelectorAll('.style-chip').forEach(chip => chip.classList.remove('active'));
+            el.classList.add('active');
+        }
+        
+        // Toast提示
+        function showToast(message, type = 'normal') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        // 点击弹窗外部关闭
+        document.getElementById('qr-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // 初始化
+        updateFavoritesPage();
+    </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+.profile-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 140px;
+}
+
+/* 顶部个人信息 */
+.profile-header {
+  padding: 80px 40px 60px;
+  border-radius: 0 0 40px 40px;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-wrapper {
+  position: relative;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #fff;
+}
+
+.edit-icon {
+  font-size: 24px;
+}
+
+.name {
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.username {
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 16px;
+}
+
+.bio {
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 0 40px;
+}
+
+.edit-btn {
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.edit-btn:active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.edit-text {
+  font-size: 26px;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 统计卡片 */
+.stats-card {
+  display: flex;
+  justify-content: space-around;
+  margin: -30px 32px 24px;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 10;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 24px;
+  color: #999;
+}
+
+/* 摄影师模式卡片 */
+.mode-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 32px 24px;
+  padding: 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.mode-info .mode-title {
+  display: block;
+  font-size: 30px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.mode-desc {
+  font-size: 24px;
+  color: #999;
+}
+
+/* 设置区块 */
+.settings-section {
+  margin: 0 32px 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.section-title {
+  padding: 24px 32px 16px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* 主题切换 */
+.theme-scroll {
+  padding: 16px 0;
+}
+
+.theme-list {
+  display: flex;
+  padding: 0 24px;
+  gap: 20px;
+}
+
+.theme-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.theme-item.active .theme-preview {
+  border: 4px solid #333;
+  transform: scale(1.05);
+}
+
+.theme-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+
+.theme-name {
+  font-size: 24px;
+  color: #666;
+}
+
+.theme-check {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 32px;
+  height: 32px;
+  background: #333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* 设置项 */
+.setting-item {
+  display: flex;
+  align-items: center;
+  padding: 28px 32px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item:active {
+  background: #f8f9fa;
+}
+
+.setting-icon {
+  font-size: 36px;
+  margin-right: 20px;
+}
+
+.setting-text {
+  flex: 1;
+  font-size: 30px;
+  color: #333;
+}
+
+.setting-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-on {
+  font-size: 26px;
+  color: #52c41a;
+  margin-right: 8px;
+}
+
+.status-off {
+  font-size: 26px;
+  color: #999;
+  margin-right: 8px;
+}
+
+.setting-value {
+  font-size: 26px;
+  color: #999;
+}
+
+.setting-arrow {
+  font-size: 32px;
+  color: #ccc;
+  margin-left: 8px;
+}
+
+/* 退出登录 */
+.logout-section {
+  margin: 48px 32px;
+}
+
+.logout-btn {
+  padding: 28px;
+  background: #fff;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.logout-btn:active {
+  background: #f8f9fa;
+}
+
+.logout-text {
+  font-size: 30px;
+  color: #ff2442;
+  font-weight: 600;
+}

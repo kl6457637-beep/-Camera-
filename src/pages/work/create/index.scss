@@ -1,0 +1,173 @@
+@import '../../../styles/variables.scss';
+
+.create-work-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  padding: $space-xl $space-lg;
+  background: $bg-white;
+  border-bottom: 1px solid $border-light;
+  
+  .page-title {
+    font-size: $font-xl;
+    font-weight: $font-bold;
+    color: $text-primary;
+  }
+}
+
+.content {
+  flex: 1;
+  padding: $space-lg;
+}
+
+.section {
+  background: $bg-white;
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  margin-bottom: $space-md;
+  box-shadow: $shadow-sm;
+  
+  .section-title {
+    font-size: $font-md;
+    font-weight: $font-bold;
+    color: $text-primary;
+    margin-bottom: $space-md;
+    
+    .required {
+      color: $color-error;
+      margin-left: 4px;
+    }
+  }
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-sm;
+  
+  .add-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    background: $bg-secondary;
+    border-radius: $radius-md;
+    border: 2px dashed $border-light;
+    
+    &:active {
+      background: $bg-tertiary;
+    }
+    
+    .add-icon {
+      font-size: 32px;
+      color: $text-tertiary;
+      margin-bottom: 4px;
+    }
+    
+    .add-text {
+      font-size: $font-xs;
+      color: $text-tertiary;
+    }
+  }
+}
+
+.title-input {
+  width: 100%;
+  padding: $space-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  font-size: $font-md;
+  
+  &::placeholder {
+    color: $text-tertiary;
+  }
+}
+
+.style-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  
+  .style-tag {
+    display: flex;
+    align-items: center;
+    padding: $space-xs $space-md;
+    background: $bg-secondary;
+    border-radius: $radius-full;
+    
+    &.active {
+      background: $color-primary;
+      
+      .style-name {
+        color: $text-white;
+      }
+    }
+    
+    .style-icon {
+      margin-right: 4px;
+      font-size: $font-sm;
+    }
+    
+    .style-name {
+      font-size: $font-sm;
+      color: $text-secondary;
+    }
+  }
+}
+
+.description-input {
+  width: 100%;
+  min-height: 120px;
+  padding: $space-md;
+  background: $bg-secondary;
+  border-radius: $radius-md;
+  font-size: $font-md;
+  font-family: inherit;
+  
+  &::placeholder {
+    color: $text-tertiary;
+  }
+}
+
+.gear-inputs {
+  display: flex;
+  gap: $space-md;
+  
+  .gear-input {
+    flex: 1;
+    padding: $space-md;
+    background: $bg-secondary;
+    border-radius: $radius-md;
+    font-size: $font-md;
+    
+    &::placeholder {
+      color: $text-tertiary;
+    }
+  }
+}
+
+.bottom-bar {
+  padding: $space-lg;
+  background: $bg-white;
+  border-top: 1px solid $border-light;
+  
+  .publish-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-md;
+    background: $color-primary;
+    border-radius: $radius-lg;
+    
+    .btn-text {
+      font-size: $font-md;
+      font-weight: $font-bold;
+      color: $text-white;
+    }
+  }
+}

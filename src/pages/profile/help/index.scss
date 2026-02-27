@@ -1,0 +1,186 @@
+.help-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航栏 */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+}
+
+.back-btn {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.back-btn:active {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.back-icon {
+  font-size: 40px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nav-placeholder {
+  width: 72px;
+}
+
+/* 帮助列表 */
+.help-list {
+  flex: 1;
+  padding: 24px;
+}
+
+.list-header {
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.header-title {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.header-subtitle {
+  font-size: 24px;
+  color: #999;
+}
+
+.help-item {
+  background: #fff;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.help-item.expanded {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.question-row {
+  display: flex;
+  align-items: center;
+  padding: 28px 32px;
+  cursor: pointer;
+}
+
+.q-mark {
+  width: 40px;
+  height: 40px;
+  background: #ff6b6b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 700;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.question-text {
+  flex: 1;
+  font-size: 30px;
+  color: #333;
+  font-weight: 500;
+}
+
+.expand-icon {
+  font-size: 36px;
+  color: #999;
+  font-weight: 300;
+}
+
+.answer-row {
+  display: flex;
+  padding: 0 32px 28px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.a-mark {
+  width: 40px;
+  height: 40px;
+  background: #52c41a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 700;
+  margin-right: 20px;
+  margin-top: 28px;
+  flex-shrink: 0;
+}
+
+.answer-text {
+  flex: 1;
+  font-size: 28px;
+  color: #666;
+  line-height: 1.6;
+  margin-top: 28px;
+}
+
+.list-footer {
+  height: 40px;
+}
+
+/* 联系客服 */
+.contact-section {
+  background: #fff;
+  padding: 32px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  border-top: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+.contact-text {
+  font-size: 26px;
+  color: #999;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.contact-btn {
+  padding: 24px 56px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+  border-radius: 40px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.contact-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.btn-text {
+  font-size: 30px;
+  color: #fff;
+  font-weight: 600;
+}

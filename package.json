@@ -1,0 +1,46 @@
+{
+  "name": "photo-portfolio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build:weapp": "taro build --type weapp && node config/cleanup-wxss.js",
+    "dev:weapp": "npm run build:weapp -- --watch",
+    "build:h5": "taro build --type h5",
+    "dev:h5": "npm run build:h5 -- --watch",
+    "cleanup": "node config/cleanup-wxss.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "光影作品集 - 摄影师作品展示与预约平台",
+  "dependencies": {
+    "@tarojs/cli": "4.1.11",
+    "@tarojs/components": "4.1.11",
+    "@tarojs/plugin-framework-react": "4.1.11",
+    "@tarojs/plugin-platform-h5": "4.1.11",
+    "@tarojs/plugin-platform-weapp": "^4.1.11",
+    "@tarojs/react": "4.1.11",
+    "@tarojs/runtime": "4.1.11",
+    "@tarojs/taro": "4.1.11",
+    "@tarojs/webpack5-runner": "4.1.11",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.28.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
+    "@types/node": "18.19.0",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0",
+    "babel-preset-taro": "^4.1.11",
+    "react-refresh": "^0.18.0",
+    "sass": "1.69.0",
+    "webpack": "^5.105.0"
+  },
+  "overrides": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}

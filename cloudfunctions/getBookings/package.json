@@ -1,0 +1,9 @@
+{
+  "name": "getBookings",
+  "version": "1.0.0",
+  "description": "获取预约列表",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

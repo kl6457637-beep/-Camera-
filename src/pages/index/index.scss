@@ -1,0 +1,459 @@
+.page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 120px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #999;
+  font-size: 32px;
+}
+
+/* 顶部背景 - 降低高度，让名片往上 */
+.header-bg {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 50%, #ffc3c3 100%);
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 50%);
+}
+
+/* 头部内容 - 往上移 */
+.header {
+  background: #fff;
+  margin: -60px 24px 0;
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+}
+
+/* 头像区域 */
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.verified-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 32px;
+  height: 32px;
+  background: #52c41a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  border: 3px solid #fff;
+}
+
+/* 摄影师名称 - 字体放大 */
+.name {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 26px;
+  color: #666;
+  display: block;
+  margin-bottom: 24px;
+}
+
+/* 统计区域 - 放大 */
+.stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 0 20px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 32px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.stat-item:active {
+  opacity: 0.7;
+}
+
+.stat-num {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 24px;
+  color: #999;
+}
+
+.stat-divider {
+  width: 2px;
+  height: 50px;
+  background: #eee;
+}
+
+/* 操作按钮 - 放大 */
+.action-btns {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 40px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.contact-btn {
+  background: #f5f5f5;
+  border: 2px solid #e8e8e8;
+}
+
+.contact-btn:active {
+  background: #e8e8e8;
+  transform: scale(0.98);
+}
+
+.book-btn {
+  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
+  border: none;
+}
+
+.book-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.btn-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon {
+  font-size: 28px;
+}
+
+.book-btn .btn-text {
+  color: #fff;
+}
+
+.btn-text {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 风格标签区域 - 放大 */
+.tabs-section {
+  background: #fff;
+  margin-top: 20px;
+  padding: 24px 0;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.tabs-scroll {
+  white-space: nowrap;
+}
+
+.tabs {
+  display: flex;
+  padding: 0 24px;
+  gap: 16px;
+}
+
+.tab {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 28px;
+  background: #f5f5f5;
+  border-radius: 32px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tab:active {
+  opacity: 0.8;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
+}
+
+.tab-icon {
+  font-size: 28px;
+}
+
+.tab-name {
+  font-size: 26px;
+  color: #666;
+  font-weight: 500;
+}
+
+.tab.active .tab-name {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 作品列表 */
+.works-list {
+  padding: 24px;
+}
+
+.work-card {
+  background: #fff;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* 图片区域 - 多图并排显示 */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  background: #f0f0f0;
+}
+
+.single-image-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* 多图容器 - 主图+副图并排 */
+.multi-image-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 4px;
+}
+
+.main-image-wrap {
+  flex: 3;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+  overflow: hidden;
+}
+
+.sub-images-wrap {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sub-image-item {
+  flex: 1;
+  border-radius: 0 12px 0 0;
+  overflow: hidden;
+}
+
+.sub-image-item:last-child {
+  border-radius: 0 0 12px 0;
+}
+
+.work-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 更多图片提示 */
+.more-images-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.7);
+  padding: 12px 20px;
+  border-radius: 12px;
+}
+
+.more-text {
+  font-size: 28px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 图片数量标识 - 放大 */
+.image-count-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.7);
+  padding: 12px 20px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.count-icon {
+  font-size: 24px;
+  color: #fff;
+}
+
+.count-text {
+  font-size: 26px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 收藏标识 - 放大 */
+.fav-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255,36,66,0.95);
+  padding: 12px 20px;
+  border-radius: 16px;
+  font-size: 28px;
+}
+
+/* 作品信息 - 放大 */
+.work-info {
+  padding: 28px;
+}
+
+.work-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.work-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.like-btn {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.like-btn.liked {
+  background: #fff0f3;
+}
+
+.like-icon {
+  font-size: 32px;
+}
+
+.work-desc {
+  font-size: 26px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.work-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.work-style-tag {
+  font-size: 24px;
+  color: #ff2442;
+  background: #fff0f3;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.work-likes {
+  font-size: 24px;
+  color: #999;
+}
+
+/* 底部导航 */
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid #eee;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 22px;
+  color: #666;
+}
+
+.nav-item.active {
+  color: #ff2442;
+}
+
+.nav-item Text:first-child {
+  font-size: 36px;
+  margin-bottom: 4px;
+}

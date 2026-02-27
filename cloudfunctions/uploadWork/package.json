@@ -1,0 +1,9 @@
+{
+  "name": "uploadWork",
+  "version": "1.0.0",
+  "description": "上传作品",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

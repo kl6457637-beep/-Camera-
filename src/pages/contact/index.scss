@@ -1,0 +1,348 @@
+@import '../../styles/variables.scss';
+
+.contact-page {
+  min-height: 100vh;
+  background: $bg-primary;
+  padding-bottom: $space-4xl;
+}
+
+.intent-card {
+  margin: $space-lg;
+  padding: $space-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-lg;
+  
+  .card-header {
+    margin-bottom: $space-lg;
+    
+    .card-title {
+      display: block;
+      font-size: $font-xl;
+      font-weight: $font-bold;
+      color: $text-white;
+      margin-bottom: $space-xs;
+    }
+    
+    .card-subtitle {
+      font-size: $font-sm;
+      color: rgba($text-white, 0.8);
+    }
+  }
+  
+  .intent-content {
+    .intent-stats {
+      display: flex;
+      gap: $space-3xl;
+      margin-bottom: $space-lg;
+      
+      .stat-item {
+        .stat-number {
+          display: block;
+          font-size: $font-4xl;
+          font-weight: $font-bold;
+          color: $text-white;
+        }
+        
+        .stat-label {
+          font-size: $font-sm;
+          color: rgba($text-white, 0.8);
+        }
+      }
+    }
+    
+    .top-styles {
+      .styles-label {
+        display: block;
+        font-size: $font-sm;
+        color: rgba($text-white, 0.8);
+        margin-bottom: $space-sm;
+      }
+      
+      .styles-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-sm;
+        
+        .style-tag {
+          padding: $space-xs $space-md;
+          background: rgba($color-white, 0.2);
+          border-radius: $radius-full;
+          
+          .tag-text {
+            font-size: $font-sm;
+            color: $text-white;
+          }
+        }
+      }
+    }
+  }
+  
+  .empty-intent {
+    padding: $space-xl 0;
+    text-align: center;
+    
+    .empty-text {
+      font-size: $font-md;
+      color: rgba($text-white, 0.8);
+    }
+  }
+}
+
+.guide-section {
+  margin: $space-lg;
+  background: $bg-white;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-lg;
+    
+    &:active {
+      background: $bg-secondary;
+    }
+    
+    .section-title {
+      font-size: $font-lg;
+      font-weight: $font-semibold;
+      color: $text-primary;
+    }
+    
+    .arrow {
+      font-size: $font-sm;
+      color: $text-tertiary;
+      transition: transform 0.3s;
+      
+      &.up {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  
+  .guide-content {
+    max-height: 800px;
+    padding: 0 $space-lg $space-lg;
+    
+    .guide-block {
+      margin-bottom: $space-xl;
+      padding-bottom: $space-lg;
+      border-bottom: 1px solid $border-light;
+      
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+      
+      .block-title {
+        display: block;
+        font-size: $font-md;
+        font-weight: $font-semibold;
+        color: $color-primary;
+        margin-bottom: $space-md;
+      }
+      
+      .guide-item {
+        margin-bottom: $space-md;
+        
+        .item-label {
+          display: block;
+          font-size: $font-sm;
+          font-weight: $font-medium;
+          color: $text-primary;
+          margin-bottom: $space-xs;
+        }
+        
+        .item-content {
+          display: block;
+          font-size: $font-sm;
+          color: $text-secondary;
+          line-height: $leading-relaxed;
+        }
+      }
+    }
+  }
+}
+
+.contact-section {
+  margin: $space-lg;
+  
+  .wechat-card {
+    background: $bg-white;
+    border-radius: $radius-xl;
+    padding: $space-lg;
+    margin-bottom: $space-lg;
+    box-shadow: $shadow-sm;
+    
+    .card-label {
+      display: block;
+      font-size: $font-sm;
+      color: $text-tertiary;
+      margin-bottom: $space-sm;
+    }
+    
+    .wechat-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .wechat-id {
+        font-size: $font-xl;
+        font-weight: $font-semibold;
+        color: $text-primary;
+        font-family: monospace;
+      }
+      
+      .copy-btn {
+        padding: $space-sm $space-md;
+        background: $bg-secondary;
+        border-radius: $radius-md;
+        
+        &:active {
+          background: $bg-tertiary;
+        }
+        
+        .btn-text {
+          font-size: $font-sm;
+          color: $color-primary;
+          font-weight: $font-medium;
+        }
+      }
+    }
+  }
+  
+  .action-tips {
+    margin-bottom: $space-lg;
+    padding: $space-md;
+    background: $bg-pink;
+    border-radius: $radius-lg;
+    
+    .tips-text {
+      font-size: $font-sm;
+      color: $color-primary-dark;
+      line-height: $leading-relaxed;
+    }
+  }
+  
+  .submit-btn {
+    padding: $space-lg;
+    background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+    border-radius: $radius-xl;
+    text-align: center;
+    box-shadow: $shadow-md;
+    
+    &:active {
+      transform: scale(0.98);
+      opacity: 0.95;
+    }
+    
+    .btn-text {
+      font-size: $font-lg;
+      font-weight: $font-semibold;
+      color: $text-white;
+    }
+  }
+}
+
+.qr-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($color-black, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-modal;
+  
+  .modal-content {
+    width: 80%;
+    max-width: 560px;
+    background: $bg-white;
+    border-radius: $radius-xxl;
+    padding: $space-3xl;
+    text-align: center;
+    animation: scaleIn 0.3s ease;
+    
+    .modal-title {
+      display: block;
+      font-size: $font-xxl;
+      font-weight: $font-bold;
+      color: $text-primary;
+      margin-bottom: $space-xs;
+    }
+    
+    .modal-subtitle {
+      display: block;
+      font-size: $font-md;
+      color: $text-secondary;
+      margin-bottom: $space-xl;
+    }
+    
+    .qr-placeholder {
+      width: 320px;
+      height: 320px;
+      margin: 0 auto $space-xl;
+      background: $bg-secondary;
+      border-radius: $radius-lg;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      
+      .qr-text {
+        font-size: $font-lg;
+        color: $text-tertiary;
+        margin-bottom: $space-sm;
+      }
+      
+      .qr-hint {
+        font-size: $font-sm;
+        color: $text-placeholder;
+      }
+    }
+    
+    .modal-action {
+      margin-bottom: $space-lg;
+      
+      .copy-btn-large {
+        padding: $space-md $space-3xl;
+        background: $color-primary;
+        border-radius: $radius-xl;
+        display: inline-block;
+        
+        &:active {
+          opacity: 0.9;
+        }
+        
+        .btn-text {
+          font-size: $font-lg;
+          font-weight: $font-medium;
+          color: $text-white;
+        }
+      }
+    }
+    
+    .close-modal {
+      .close-text {
+        font-size: $font-md;
+        color: $text-tertiary;
+      }
+    }
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

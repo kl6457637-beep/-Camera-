@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>光影作品集 V3.1 - 创作者平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+            --text: #262626;
+            --text-secondary: #8E8E8E;
+            --border: #DBDBDB;
+            --accent: #3897F0;
+            --danger: #ED4956;
+            --success: #4CAF50;
+            --warning: #FF9500;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        .phone-frame {
+            max-width: 414px;
+            margin: 0 auto;
+            background: var(--white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 页面 */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .page.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 导航栏 */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+        }
+        
+        .nav-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 24px;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px 20px;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-item.active { opacity: 1; }
+        
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* 按钮 */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn:active { transform: scale(0.96); }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        /* 标签 */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-pending { background: #FFF3E0; color: #F57C00; }
+        .badge-confirmed { background: #E3F2FD; color: #1976D2; }
+        .badge-shooting { background: #F3E5F5; color: #7B1FA2; }
+        .badge-review { background: #E8EAF6; color: #3F51B5; }
+        .badge-completed { background: #E8F5E9; color: #388E3C; }
+        .badge-cancelled { background: #F5F5F5; color: #616161; }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 14px 24px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            z-index: 2000;
+            display: none;
+        }
+        
+        .toast.show { display: block; }
+        
+        /* 模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.show { display: flex; }
+        
+        .modal-content {
+            width: 85%;
+            max-width: 320px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .modal-body { padding: 20px; }
+        
+        .modal-footer {
+            display: flex;
+            border-top: 1px solid var(--border);
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background: white;
+        }
+        
+        .modal-btn + .modal-btn { border-left: 1px solid var(--border); }
+        .modal-btn.primary { color: var(--accent); font-weight: 600; }
+        .modal-btn.danger { color: var(--danger); font-weight: 600; }
+        
+        /* ========== Tab 1: 发现 ========== */
+        
+        .search-bar {
+            margin: 12px 16px;
+            padding: 10px 16px;
+            background: var(--bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            outline: none;
+        }
+        
+        .search-bar .search-btn {
+            padding: 6px 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .search-results {
+            padding: 12px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .search-results-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .search-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 16px;
+            font-size: 13px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        
+        .style-tags {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .style-tag {
+            padding: 6px 14px;
+            background: var(--bg);
+            border-radius: 16px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        .style-tag.active {
+            background: var(--text);
+            color: white;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+        }
+        
+        .grid-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: var(--bg);
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* 照片详情页 */
+        .photo-detail-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+        }
+        
+        .photo-detail-page.show { display: block; }
+        
+        .photo-detail-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            z-index: 10;
+        }
+        
+        .photo-detail-back {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        .photo-detail-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .photo-detail-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .photo-detail-username {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .photo-detail-follow {
+            padding: 6px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .photo-detail-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        
+        .photo-detail-actions {
+            display: flex;
+            padding: 12px 16px;
+            gap: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .photo-detail-action {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+        }
+        
+        .photo-detail-action.spacer { flex: 1; }
+        
+        .photo-detail-info {
+            padding: 16px;
+        }
+        
+        .photo-detail-likes {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .photo-detail-title {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .photo-detail-style {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--bg);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent);
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .photo-detail-notes {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .photo-detail-gear {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .photo-detail-gear-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        
+        .photo-detail-date {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* ========== Tab 2: 作品 ========== */
+        
+        .portfolio-header {
+            padding: 20px 16px;
+            text-align: center;
+        }
+        
+        .portfolio-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            object-fit: cover;
+        }
+        
+        .portfolio-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .portfolio-bio {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .portfolio-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        .upload-area {
+            margin: 16px;
+            padding: 40px;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--accent);
+            background: rgba(56, 151, 240, 0.05);
+        }
+        
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            color: var(--accent);
+        }
+        
+        /* 上传作品模态框 */
+        .upload-modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .upload-photo-area {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .upload-photo-area svg {
+            width: 48px;
+            height: 48px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        
+        .upload-photo-preview {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            min-height: 44px;
+        }
+        
+        .tag-input {
+            flex: 1;
+            min-width: 80px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            padding: 4px;
+        }
+        
+        .tag-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--accent);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .tag-item .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .gear-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        /* ========== Tab 3: 预约 ========== */
+        
+        .booking-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .booking-tab {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .booking-tab.active {
+            font-weight: 600;
+        }
+        
+        .booking-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: var(--text);
+        }
+        
+        .booking-tab .tab-badge {
+            position: absolute;
+            top: 10px;
+            right: 20%;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            border-radius: 8px;
+        }
+        
+        /* 预约状态筛选 */
+        .booking-status-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            overflow-x: auto;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .booking-status-tab {
+            padding: 8px 16px;
+            background: var(--bg);
+            border-radius: 16px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        .booking-status-tab.active {
+            background: var(--text);
+            color: white;
+        }
+        
+        .booking-section {
+            padding: 16px;
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .booking-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .booking-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .booking-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .booking-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .booking-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .booking-detail {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .booking-photos {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        
+        .booking-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .booking-action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+        }
+        
+        .booking-action-btn.confirm {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .booking-action-btn.secondary {
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        .booking-action-btn.danger {
+            background: #ffebee;
+            color: var(--danger);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+        
+        /* 联系摄影师弹窗 */
+        .contact-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .contact-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            object-fit: cover;
+        }
+        
+        .contact-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .contact-role {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        .wechat-id {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .wechat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        .wechat-value {
+            font-size: 20px;
+            font-weight: 700;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* ========== Tab 4: 我的 ========== */
+        
+        .profile-header {
+            padding: 32px 20px;
+            text-align: center;
+        }
+        
+        .profile-avatar-large {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+            object-fit: cover;
+        }
+        
+        .profile-name-large {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .profile-handle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .profile-bio {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+        
+        .photographer-mode-card {
+            margin: 16px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            color: white;
+        }
+        
+        .photographer-mode-card.disabled {
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        .mode-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .mode-desc {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .mode-toggle.active {
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+        }
+        
+        .menu-list {
+            margin-top: 8px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-text {
+            flex: 1;
+            font-size: 15px;
+        }
+        
+        .menu-arrow {
+            color: var(--text-secondary);
+        }
+        
+        /* 设置页面样式 */
+        .settings-section {
+            padding: 20px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .settings-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+        
+        .settings-item-text {
+            font-size: 15px;
+        }
+        
+        .settings-item-value {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* 完成拍摄弹窗 */
+        .complete-modal-content {
+            text-align: center;
+            padding: 24px;
+        }
+        
+        .complete-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+        }
+        
+        .complete-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .complete-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .complete-next-steps {
+            text-align: left;
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .complete-next-steps h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .complete-next-steps ul {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding-left: 16px;
+            line-height: 1.8;
+        }
+        
+        /* 评分星星 */
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 16px 0;
+        }
+        
+        .star {
+            font-size: 32px;
+            color: #ddd;
+            cursor: pointer;
+        }
+        
+        .star.active {
+            color: #FFB800;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- ========== Tab 1: 发现 ========== -->
+        <div id="page-discover" class="page active">
+            <div class="nav-header">
+                <span style="font-size: 20px; font-weight: 700; font-family: 'Georgia', serif;">光影</span>
+                <!-- 移除了收藏icon，改为消息通知icon -->
+                <div class="nav-icon" onclick="showToast('消息通知功能')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="search-bar">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="search-input" placeholder="搜索摄影师、风格、作品" onkeypress="handleSearch(event)">
+                <button class="search-btn" onclick="performSearch()">搜索</button>
+            </div>
+            
+            <!-- 搜索结果 -->
+            <div class="search-results" id="search-results" style="display: none;">
+                <div class="search-results-title">热门搜索</div>
+                <div class="search-tag" onclick="quickSearch('复古胶片')">复古胶片</div>
+                <div class="search-tag" onclick="quickSearch('日系清新')">日系清新</div>
+                <div class="search-tag" onclick="quickSearch('光影诗人')">光影诗人</div>
+                <div class="search-tag" onclick="quickSearch('上海约拍')">上海约拍</div>
+                <div class="search-tag" onclick="quickSearch('毕业照')">毕业照</div>
+            </div>
+            
+            <div class="style-tags">
+                <div class="style-tag active" onclick="filterByStyle('all')">全部</div>
+                <div class="style-tag" onclick="filterByStyle('复古胶片')">复古胶片</div>
+                <div class="style-tag" onclick="filterByStyle('日系清新')">日系清新</div>
+                <div class="style-tag" onclick="filterByStyle('情绪人像')">情绪人像</div>
+                <div class="style-tag" onclick="filterByStyle('时尚大片')">时尚大片</div>
+                <div class="style-tag" onclick="filterByStyle('街拍纪实')">街拍纪实</div>
+            </div>
+            
+            <div class="photo-grid" id="discover-grid"></div>
+        </div>
+        
+        <!-- ========== Tab 2: 作品 ========== -->
+        <div id="page-portfolio" class="page">
+            <div class="nav-header">
+                <span class="nav-title">我的作品</span>
+                <!-- 更换为明确的上传图标 -->
+                <div class="nav-icon" onclick="showUploadModal()" title="上传新作品">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <circle cx="18" cy="6" r="3" fill="#3897F0" stroke="none"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="portfolio-header">
+                <img class="portfolio-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" alt="头像">
+                <div class="portfolio-name">光影诗人</div>
+                <div class="portfolio-bio">用镜头记录每一个动人瞬间</div>
+            </div>
+            
+            <div class="portfolio-stats">
+                <div class="stat-item">
+                    <div class="stat-value">128</div>
+                    <div class="stat-label">作品</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">2.3k</div>
+                    <div class="stat-label">收藏</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">56</div>
+                    <div class="stat-label">预约</div>
+                </div>
+            </div>
+            
+            <!-- 更换上传区域图标 -->
+            <div class="upload-area" onclick="showUploadModal()">
+                <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <div style="font-size: 15px; font-weight: 500; margin-bottom: 4px;">上传新作品</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">点击添加照片、风格标签和创作想法</div>
+            </div>
+            
+            <div class="photo-grid" id="portfolio-grid"></div>
+        </div>
+        
+        <!-- ========== Tab 3: 预约 ========== -->
+        <div id="page-booking" class="page">
+            <div class="nav-header">
+                <span class="nav-title">预约中心</span>
+            </div>
+            
+            <div class="booking-tabs">
+                <div class="booking-tab active" onclick="switchBookingTab('sent')">我发出的</div>
+                <div class="booking-tab" onclick="switchBookingTab('received')">
+                    我收到的
+                    <span class="tab-badge">3</span>
+                </div>
+            </div>
+            
+            <!-- 预约状态筛选Tab -->
+            <div class="booking-status-tabs" id="booking-status-tabs">
+                <div class="booking-status-tab active" onclick="filterBookingStatus('all')">全部</div>
+                <div class="booking-status-tab" onclick="filterBookingStatus('pending')">待确认</div>
+                <div class="booking-status-tab" onclick="filterBookingStatus('confirmed')">已确认</div>
+                <div class="booking-status-tab" onclick="filterBookingStatus('shooting')">拍摄中</div>
+                <div class="booking-status-tab" onclick="filterBookingStatus('review')">待评价</div>
+                <div class="booking-status-tab" onclick="filterBookingStatus('completed')">已完成</div>
+                <div class="booking-status-tab" onclick="filterBookingStatus('cancelled')">已取消</div>
+            </div>
+            
+            <!-- 我发出的预约 -->
+            <div id="booking-sent" class="booking-section">
+                <div class="booking-card" data-status="pending">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar">📷</div>
+                            <div class="booking-info">
+                                <h4>光影诗人</h4>
+                                <p>摄影师</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-pending">待确认</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>期望时间：2024年2月15日</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                        <span>拍摄类型：个人写真</span>
+                    </div>
+                    <div class="booking-photos">
+                        <img class="booking-photo" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop" alt="">
+                        <img class="booking-photo" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop" alt="">
+                    </div>
+                    <div class="booking-actions">
+                        <button class="booking-action-btn danger" onclick="cancelBooking()">取消预约</button>
+                        <button class="booking-action-btn secondary" onclick="viewBookingDetail('sent', 'pending')">查看详情</button>
+                    </div>
+                </div>
+                
+                <div class="booking-card" data-status="confirmed">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">📷</div>
+                            <div class="booking-info">
+                                <h4>Lisa Photography</h4>
+                                <p>摄影师</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-confirmed">已确认</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>拍摄时间：2024年2月20日 下午</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>地点：上海法租界</span>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="booking-action-btn secondary" onclick="showContactModal('Lisa Photography', 'lisa_photo_2024')">联系摄影师</button>
+                        <button class="booking-action-btn confirm" onclick="viewBookingDetail('sent', 'confirmed')">查看详情</button>
+                    </div>
+                </div>
+                
+                <div class="booking-card" data-status="shooting">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">📷</div>
+                            <div class="booking-info">
+                                <h4>小明摄影</h4>
+                                <p>摄影师</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-shooting">拍摄中</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>拍摄时间：今天 14:00-16:00</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>地点：外滩观景台</span>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="booking-action-btn secondary" onclick="showContactModal('小明摄影', 'xiaoming_sh')">联系摄影师</button>
+                        <button class="booking-action-btn confirm" onclick="showCompleteModal()">完成拍摄</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 我收到的预约 -->
+            <div id="booking-received" class="booking-section" style="display: none;">
+                <div class="booking-card" data-status="pending">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar">小</div>
+                            <div class="booking-info">
+                                <h4>小雨</h4>
+                                <p>2小时前</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-pending">待确认</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>期望时间：2024年2月15日</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                        <span>个人写真 · 喜欢复古胶片风格</span>
+                    </div>
+                    <div class="booking-photos">
+                        <img class="booking-photo" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop" alt="">
+                        <img class="booking-photo" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=100&h=100&fit=crop" alt="">
+                    </div>
+                    <div class="booking-actions">
+                        <!-- 三个按钮同时存在 -->
+                        <button class="booking-action-btn secondary" onclick="chatWithClient()">沟通</button>
+                        <button class="booking-action-btn danger" onclick="rejectBooking()">婉拒</button>
+                        <button class="booking-action-btn confirm" onclick="confirmBooking()">确认预约</button>
+                    </div>
+                </div>
+                
+                <div class="booking-card" data-status="pending">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">L</div>
+                            <div class="booking-info">
+                                <h4>Lisa</h4>
+                                <p>5小时前</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-pending">待确认</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>期望时间：2024年2月16日</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                        <span>情侣照 · 希望自然光拍摄</span>
+                    </div>
+                    <div class="booking-actions">
+                        <!-- 三个按钮同时存在 -->
+                        <button class="booking-action-btn secondary" onclick="chatWithClient()">沟通</button>
+                        <button class="booking-action-btn danger" onclick="rejectBooking()">婉拒</button>
+                        <button class="booking-action-btn confirm" onclick="confirmBooking()">确认预约</button>
+                    </div>
+                </div>
+                
+                <div class="booking-card" data-status="shooting">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">雅</div>
+                            <div class="booking-info">
+                                <h4>小雅</h4>
+                                <p>1天前</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-shooting">拍摄中</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>拍摄时间：今天 下午2:00</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                        <span>毕业照 · 5人合影</span>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="booking-action-btn secondary" onclick="chatWithClient()">沟通</button>
+                        <button class="booking-action-btn confirm" onclick="showCompleteModal()">完成拍摄</button>
+                    </div>
+                </div>
+                
+                <div class="booking-card" data-status="review">
+                    <div class="booking-card-header">
+                        <div class="booking-user">
+                            <div class="booking-avatar" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">梦</div>
+                            <div class="booking-info">
+                                <h4>梦梦</h4>
+                                <p>3天前</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-review">待评价</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>拍摄时间：2024年2月5日</span>
+                    </div>
+                    <div class="booking-detail">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                        <span>个人写真 · 日系清新风格</span>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="booking-action-btn confirm" onclick="showRatingModal()">去评价</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== Tab 4: 我的 ========== -->
+        <div id="page-me" class="page">
+            <div class="profile-header">
+                <img class="profile-avatar-large" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" alt="头像">
+                <div class="profile-name-large">光影诗人</div>
+                <div class="profile-handle">@light_chaser</div>
+                <div class="profile-bio">"用镜头记录每一个动人瞬间"</div>
+                <button class="btn btn-secondary" style="margin-top: 12px;">编辑个人资料</button>
+            </div>
+            
+            <!-- 摄影师模式开关 -->
+            <div class="photographer-mode-card" id="photographer-mode-card">
+                <div class="mode-title">📷 摄影师模式</div>
+                <div class="mode-desc" id="mode-desc">
+                    开启后，你可以接收其他用户的拍摄预约，拓展你的摄影业务
+                </div>
+                <div class="mode-toggle" id="mode-toggle" onclick="togglePhotographerMode()">
+                    <span id="mode-toggle-text">开启摄影师功能</span>
+                </div>
+            </div>
+            
+            <div class="menu-list">
+                <div class="menu-item" onclick="showProfileSettings()">
+                    <div class="menu-icon">👤</div>
+                    <div class="menu-text">个人资料</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item" onclick="showNotificationSettings()">
+                    <div class="menu-icon">🔔</div>
+                    <div class="menu-text">消息通知</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item" onclick="showPrivacySettings()">
+                    <div class="menu-icon">🔒</div>
+                    <div class="menu-text">隐私设置</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item" onclick="showHelpCenter()">
+                    <div class="menu-icon">❓</div>
+                    <div class="menu-text">帮助中心</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+            
+            <div style="padding: 20px; text-align: center;">
+                <button class="btn btn-secondary" style="width: 100%;">退出登录</button>
+            </div>
+        </div>
+        
+        <!-- ========== 底部导航 ========== -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('discover')">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+            </div>
+            <div class="nav-item" onclick="switchTab('portfolio')">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <div class="nav-item" onclick="switchTab('booking')">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <div class="nav-item" onclick="switchTab('me')">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ========== 各种模态框 ========== -->
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- 照片详情页 -->
+    <div class="photo-detail-page" id="photo-detail-page">
+        <div class="photo-detail-header">
+            <svg class="photo-detail-back" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="closePhotoDetail()">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            <div class="photo-detail-user">
+                <img class="photo-detail-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="">
+                <span class="photo-detail-username">光影诗人</span>
+            </div>
+            <button class="photo-detail-follow">关注</button>
+        </div>
+        <img class="photo-detail-image" id="detail-image" src="" alt="">
+        <div class="photo-detail-actions">
+            <svg class="photo-detail-action" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="toggleLike()">
+                <path id="like-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+            <svg class="photo-detail-action" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="showToast('评论功能')">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <svg class="photo-detail-action" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="showToast('分享功能')">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+            <div class="photo-detail-action spacer"></div>
+            <svg class="photo-detail-action" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="showToast('收藏功能')">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+            </svg>
+        </div>
+        <div class="photo-detail-info">
+            <div class="photo-detail-likes" id="detail-likes">1,234 次赞</div>
+            <div class="photo-detail-title" id="detail-title">作品标题</div>
+            <div id="detail-styles">
+                <span class="photo-detail-style">复古胶片</span>
+                <span class="photo-detail-style">情绪人像</span>
+            </div>
+            <div class="photo-detail-notes" id="detail-notes">
+                这张照片拍摄于上海的法租界，使用了柯达Portra 400胶片。午后的阳光透过梧桐树叶洒在脸上，形成了自然的光影效果。模特的情绪非常到位，眼神中透露出一种淡淡的忧郁，完美诠释了"旧时光"这个主题。
+            </div>
+            <div class="photo-detail-gear">
+                <div class="photo-detail-gear-title">📷 拍摄参数</div>
+                <div>相机：Canon EOS R5 | 镜头：RF 85mm f/1.2L</div>
+                <div>光圈：f/1.4 | 快门：1/500s | ISO：100</div>
+                <div>后期：Lightroom调色，增加了颗粒感和暗角</div>
+            </div>
+            <div class="photo-detail-date">2024年2月1日</div>
+        </div>
+        <!-- 底部预约按钮 -->
+        <div style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 414px; padding: 12px 16px; background: white; border-top: 1px solid var(--border);">
+            <button class="btn btn-primary" style="width: 100%;" onclick="showToast('发起预约')">预约拍摄</button>
+        </div>
+    </div>
+    
+    <!-- 上传作品模态框 -->
+    <div class="modal-overlay" id="upload-modal">
+        <div class="modal-content" style="max-width: 360px;">
+            <div class="modal-header">
+                <h3>上传新作品</h3>
+            </div>
+            <div class="upload-modal-body">
+                <div class="upload-photo-area" id="upload-photo-area" onclick="selectPhoto()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span style="color: var(--text-secondary);">点击选择照片</span>
+                </div>
+                <img class="upload-photo-preview" id="upload-preview" style="display: none;" src="" alt="">
+                
+                <div class="form-group">
+                    <label class="form-label">作品标题 *</label>
+                    <input type="text" class="form-input" id="upload-title" placeholder="给你的作品起个名字">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">风格标签 <span style="font-weight: normal; color: var(--text-secondary);">(按回车添加)</span></label>
+                    <div class="tag-input-container" id="style-tags-container">
+                        <input type="text" class="tag-input" id="style-tag-input" placeholder="例如：复古胶片、日系清新">
+                    </div>
+                    <div class="form-hint">添加风格标签帮助他人发现你的作品</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">创作想法 / 摄影师备注</label>
+                    <textarea class="form-textarea" id="upload-notes" placeholder="分享这张照片背后的故事、拍摄心得、创作理念..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">拍摄设备</label>
+                    <div class="gear-grid">
+                        <input type="text" class="form-input" id="upload-camera" placeholder="相机型号">
+                        <input type="text" class="form-input" id="upload-lens" placeholder="镜头">
+                        <input type="text" class="form-input" id="upload-aperture" placeholder="光圈 (如: f/1.8)">
+                        <input type="text" class="form-input" id="upload-shutter" placeholder="快门 (如: 1/500s)">
+                        <input type="text" class="form-input" id="upload-iso" placeholder="ISO">
+                        <input type="text" class="form-input" id="upload-post" placeholder="后期处理">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn" onclick="closeUploadModal()">取消</button>
+                <button class="modal-btn primary" onclick="submitUpload()">发布</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 联系摄影师弹窗 -->
+    <div class="modal-overlay" id="contact-modal">
+        <div class="modal-content">
+            <div class="contact-card">
+                <img class="contact-avatar" id="contact-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" alt="">
+                <div class="contact-name" id="contact-name">摄影师名称</div>
+                <div class="contact-role">微信号</div>
+                <div class="wechat-id">
+                    <div class="wechat-label">复制微信号添加好友</div>
+                    <div class="wechat-value" id="wechat-id">wechat_id_123</div>
+                </div>
+                <button class="copy-btn" onclick="copyWechatId()">复制微信号</button>
+                <button class="modal-btn" style="margin-top: 12px; color: var(--text-secondary);" onclick="closeContactModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 完成拍摄弹窗 -->
+    <div class="modal-overlay" id="complete-modal">
+        <div class="modal-content">
+            <div class="complete-modal-content">
+                <div class="complete-icon">✓</div>
+                <div class="complete-title">拍摄完成！</div>
+                <div class="complete-desc">
+                    恭喜你完成了一次拍摄！接下来请按以下流程操作：
+                </div>
+                <div class="complete-next-steps">
+                    <h4>📋 后续步骤</h4>
+                    <ul>
+                        <li>72小时内交付精修照片（建议15-30张）</li>
+                        <li>上传成片到作品集，标记拍摄对象</li>
+                        <li>提醒对方确认收到成片并评价</li>
+                        <li>及时回复对方的任何问题</li>
+                    </ul>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="closeCompleteModal()">我知道了</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 评价弹窗 -->
+    <div class="modal-overlay" id="rating-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>评价这次拍摄</h3>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p style="margin-bottom: 16px; color: var(--text-secondary);">请为摄影师的拍摄服务打分</p>
+                <div class="rating-stars">
+                    <span class="star" onclick="setRating(1)">★</span>
+                    <span class="star" onclick="setRating(2)">★</span>
+                    <span class="star" onclick="setRating(3)">★</span>
+                    <span class="star" onclick="setRating(4)">★</span>
+                    <span class="star" onclick="setRating(5)">★</span>
+                </div>
+                <textarea class="form-textarea" placeholder="写下你的评价，帮助其他用户了解这位摄影师..." style="margin-top: 16px;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn" onclick="closeRatingModal()">跳过</button>
+                <button class="modal-btn primary" onclick="submitRating()">提交评价</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 设置页面弹窗 -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content" style="width: 90%; max-width: 380px;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="closeSettingsModal()" style="cursor: pointer;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <h3 id="settings-title">设置</h3>
+                </div>
+            </div>
+            <div class="modal-body" id="settings-content">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 数据 ==========
+        const photos = [
+            { 
+                id: 1, 
+                url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop', 
+                title: '秋日午后', 
+                style: '复古胶片',
+                likes: 1234,
+                photographer: '光影诗人',
+                notes: '这张照片拍摄于上海的法租界，使用了柯达Portra 400胶片。午后的阳光透过梧桐树叶洒在脸上，形成了自然的光影效果。',
+                camera: 'Canon EOS R5',
+                lens: 'RF 85mm f/1.2L',
+                settings: 'f/1.4 | 1/500s | ISO 100',
+                post: 'Lightroom调色，增加了颗粒感和暗角'
+            },
+            { 
+                id: 2, 
+                url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop', 
+                title: '深海之眸', 
+                style: '情绪人像',
+                likes: 892,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 3, 
+                url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop', 
+                title: '时光慢递', 
+                style: '复古胶片',
+                likes: 2156,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 4, 
+                url: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop', 
+                title: '镜中自我', 
+                style: '情绪人像',
+                likes: 743,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 5, 
+                url: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=400&fit=crop', 
+                title: '街角故事', 
+                style: '街拍纪实',
+                likes: 1567,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 6, 
+                url: 'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=400&fit=crop', 
+                title: '风尚前沿', 
+                style: '时尚大片',
+                likes: 3210,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 7, 
+                url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop', 
+                title: '旧时光', 
+                style: '复古胶片',
+                likes: 1890,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 8, 
+                url: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop', 
+                title: '雨中漫步', 
+                style: '情绪人像',
+                likes: 1023,
+                photographer: '光影诗人'
+            },
+            { 
+                id: 9, 
+                url: 'https://images.unsplash.com/photo-1496440737103-cd596325d314?w=400&h=400&fit=crop', 
+                title: '夏日回忆', 
+                style: '日系清新',
+                likes: 2456,
+                photographer: '光影诗人'
+            }
+        ];
+        
+        let isPhotographerMode = false;
+        let currentTab = 'discover';
+        let currentBookingTab = 'sent';
+        let selectedStyleTags = [];
+        
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGrids();
+            setupTagInput();
+        });
+        
+        function renderGrids() {
+            // 渲染发现页网格
+            const discoverGrid = document.getElementById('discover-grid');
+            discoverGrid.innerHTML = photos.map(photo => `
+                <div class="grid-item" onclick="showPhotoDetail(${photo.id})">
+                    <img src="${photo.url}" alt="${photo.title}" loading="lazy">
+                </div>
+            `).join('');
+            
+            // 渲染作品集网格
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            portfolioGrid.innerHTML = photos.slice(0, 6).map(photo => `
+                <div class="grid-item" onclick="editPhoto(${photo.id})">
+                    <img src="${photo.url}" alt="${photo.title}" loading="lazy">
+                </div>
+            `).join('');
+        }
+        
+        // ========== Tab切换 ==========
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('page-' + tab).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+                const tabs = ['discover', 'portfolio', 'booking', 'me'];
+                if (tabs[index] === tab) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        // ========== 发现页功能 ==========
+        
+        // 搜索功能
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            } else {
+                // 显示搜索结果提示
+                const resultsDiv = document.getElementById('search-results');
+                resultsDiv.style.display = 'block';
+            }
+        }
+        
+        function performSearch() {
+            const query = document.getElementById('search-input').value;
+            if (query.trim()) {
+                showToast(`搜索：${query}`);
+                document.getElementById('search-results').style.display = 'none';
+            }
+        }
+        
+        function quickSearch(keyword) {
+            document.getElementById('search-input').value = keyword;
+            performSearch();
+        }
+        
+        // 风格筛选
+        function filterByStyle(style) {
+            document.querySelectorAll('.style-tag').forEach(tag => {
+                tag.classList.remove('active');
+                if (tag.textContent === style || (style === 'all' && tag.textContent === '全部')) {
+                    tag.classList.add('active');
+                }
+            });
+            showToast(`筛选：${style === 'all' ? '全部' : style}`);
+        }
+        
+        // 照片详情
+        function showPhotoDetail(id) {
+            const photo = photos.find(p => p.id === id);
+            if (photo) {
+                document.getElementById('detail-image').src = photo.url;
+                document.getElementById('detail-title').textContent = photo.title;
+                document.getElementById('detail-likes').textContent = `${photo.likes.toLocaleString()} 次赞`;
+                
+                if (photo.notes) {
+                    document.getElementById('detail-notes').textContent = photo.notes;
+                }
+                
+                document.getElementById('photo-detail-page').classList.add('show');
+            }
+        }
+        
+        function closePhotoDetail() {
+            document.getElementById('photo-detail-page').classList.remove('show');
+        }
+        
+        function toggleLike() {
+            const likeIcon = document.getElementById('like-icon');
+            const isLiked = likeIcon.getAttribute('fill') === 'currentColor';
+            
+            if (isLiked) {
+                likeIcon.setAttribute('fill', 'none');
+                likeIcon.style.color = '';
+            } else {
+                likeIcon.setAttribute('fill', 'currentColor');
+                likeIcon.style.color = '#ED4956';
+            }
+        }
+        
+        // ========== 作品页功能 ==========
+        
+        // 上传模态框
+        function showUploadModal() {
+            document.getElementById('upload-modal').classList.add('show');
+        }
+        
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.remove('show');
+            resetUploadForm();
+        }
+        
+        function resetUploadForm() {
+            document.getElementById('upload-title').value = '';
+            document.getElementById('upload-notes').value = '';
+            document.getElementById('upload-camera').value = '';
+            document.getElementById('upload-lens').value = '';
+            document.getElementById('upload-aperture').value = '';
+            document.getElementById('upload-shutter').value = '';
+            document.getElementById('upload-iso').value = '';
+            document.getElementById('upload-post').value = '';
+            selectedStyleTags = [];
+            renderStyleTags();
+            
+            document.getElementById('upload-photo-area').style.display = 'flex';
+            document.getElementById('upload-preview').style.display = 'none';
+        }
+        
+        function selectPhoto() {
+            showToast('选择照片（演示）');
+            // 模拟选择照片
+            document.getElementById('upload-photo-area').style.display = 'none';
+            document.getElementById('upload-preview').src = photos[0].url;
+            document.getElementById('upload-preview').style.display = 'block';
+        }
+        
+        function setupTagInput() {
+            const input = document.getElementById('style-tag-input');
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const tag = this.value.trim();
+                    if (tag && !selectedStyleTags.includes(tag)) {
+                        selectedStyleTags.push(tag);
+                        renderStyleTags();
+                        this.value = '';
+                    }
+                }
+            });
+        }
+        
+        function renderStyleTags() {
+            const container = document.getElementById('style-tags-container');
+            const input = document.getElementById('style-tag-input');
+            
+            // 保留输入框，只更新标签
+            container.innerHTML = selectedStyleTags.map(tag => `
+                <span class="tag-item">
+                    ${tag}
+                    <span class="remove" onclick="removeStyleTag('${tag}')">×</span>
+                </span>
+            `).join('') + '<input type="text" class="tag-input" id="style-tag-input" placeholder="例如：复古胶片、日系清新">';
+            
+            // 重新绑定事件
+            setupTagInput();
+        }
+        
+        function removeStyleTag(tag) {
+            selectedStyleTags = selectedStyleTags.filter(t => t !== tag);
+            renderStyleTags();
+        }
+        
+        function submitUpload() {
+            const title = document.getElementById('upload-title').value;
+            if (!title) {
+                showToast('请填写作品标题');
+                return;
+            }
+            showToast('作品发布成功！');
+            closeUploadModal();
+        }
+        
+        function editPhoto(id) {
+            showToast(`编辑作品：ID ${id}`);
+        }
+        
+        // ========== 预约功能 ==========
+        
+        function switchBookingTab(type) {
+            currentBookingTab = type;
+            document.querySelectorAll('.booking-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (type === 'sent') {
+                document.getElementById('booking-sent').style.display = 'block';
+                document.getElementById('booking-received').style.display = 'none';
+            } else {
+                document.getElementById('booking-sent').style.display = 'none';
+                document.getElementById('booking-received').style.display = 'block';
+            }
+        }
+        
+        // 预约状态筛选
+        function filterBookingStatus(status) {
+            document.querySelectorAll('.booking-status-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.includes(getStatusLabel(status))) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // 筛选卡片显示
+            const container = currentBookingTab === 'sent' ? 'booking-sent' : 'booking-received';
+            document.querySelectorAll(`#${container} .booking-card`).forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            showToast(`筛选：${getStatusLabel(status)}`);
+        }
+        
+        function getStatusLabel(status) {
+            const labels = {
+                'all': '全部',
+                'pending': '待确认',
+                'confirmed': '已确认',
+                'shooting': '拍摄中',
+                'review': '待评价',
+                'completed': '已完成',
+                'cancelled': '已取消'
+            };
+            return labels[status] || status;
+        }
+        
+        // 预约操作
+        function confirmBooking() {
+            showToast('已确认预约！已通知对方');
+        }
+        
+        function rejectBooking() {
+            if (confirm('确定要婉拒这个预约吗？')) {
+                showToast('已婉拒预约');
+            }
+        }
+        
+        function cancelBooking() {
+            if (confirm('确定要取消这个预约吗？')) {
+                showToast('预约已取消');
+            }
+        }
+        
+        function chatWithClient() {
+            showToast('打开聊天窗口...');
+        }
+        
+        function viewBookingDetail(type, status) {
+            showToast(`查看预约详情\n类型：${type === 'sent' ? '我发出的' : '我收到的'}\n状态：${getStatusLabel(status)}`);
+        }
+        
+        // 联系摄影师弹窗
+        function showContactModal(photographerName, wechatId) {
+            document.getElementById('contact-name').textContent = photographerName;
+            document.getElementById('wechat-id').textContent = wechatId;
+            document.getElementById('contact-modal').classList.add('show');
+        }
+        
+        function closeContactModal() {
+            document.getElementById('contact-modal').classList.remove('show');
+        }
+        
+        function copyWechatId() {
+            const wechatId = document.getElementById('wechat-id').textContent;
+            // 复制到剪贴板
+            navigator.clipboard.writeText(wechatId).then(() => {
+                showToast('微信号已复制到剪贴板');
+            }).catch(() => {
+                showToast('微信号：' + wechatId);
+            });
+        }
+        
+        // 完成拍摄弹窗
+        function showCompleteModal() {
+            document.getElementById('complete-modal').classList.add('show');
+        }
+        
+        function closeCompleteModal() {
+            document.getElementById('complete-modal').classList.remove('show');
+        }
+        
+        // 评价弹窗
+        function showRatingModal() {
+            document.getElementById('rating-modal').classList.add('show');
+        }
+        
+        function closeRatingModal() {
+            document.getElementById('rating-modal').classList.remove('show');
+        }
+        
+        let currentRating = 0;
+        function setRating(rating) {
+            currentRating = rating;
+            document.querySelectorAll('.star').forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        function submitRating() {
+            if (currentRating === 0) {
+                showToast('请先选择评分');
+                return;
+            }
+            showToast(`提交成功！你给了 ${currentRating} 星好评`);
+            closeRatingModal();
+        }
+        
+        // ========== 我的页面功能 ==========
+        
+        function togglePhotographerMode() {
+            isPhotographerMode = !isPhotographerMode;
+            
+            const card = document.getElementById('photographer-mode-card');
+            const toggle = document.getElementById('mode-toggle');
+            const text = document.getElementById('mode-toggle-text');
+            const desc = document.getElementById('mode-desc');
+            
+            if (isPhotographerMode) {
+                card.classList.remove('disabled');
+                toggle.classList.add('active');
+                text.textContent = '✓ 已开启';
+                desc.innerHTML = `
+                    <strong>你当前是【摄影师】身份</strong><br>
+                    • 可以接收拍摄预约<br>
+                    • 管理客户咨询<br>
+                    • 本月已收到 12 个预约
+                `;
+                showToast('摄影师模式已开启！');
+            } else {
+                card.classList.add('disabled');
+                toggle.classList.remove('active');
+                text.textContent = '开启摄影师功能';
+                desc.textContent = '开启后，你可以接收其他用户的拍摄预约，拓展你的摄影业务';
+                showToast('摄影师模式已关闭');
+            }
+        }
+        
+        // ========== 设置页面 ==========
+        
+        function showProfileSettings() {
+            const content = `
+                <div class="settings-section">
+                    <div class="settings-title">基本信息</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">昵称</span>
+                        <span class="settings-item-value">光影诗人 ›</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">头像</span>
+                        <span class="settings-item-value">›</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">简介</span>
+                        <span class="settings-item-value">用镜头记录每一个动人瞬间 ›</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">联系信息</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">微信号</span>
+                        <span class="settings-item-value">light_chaser ›</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">手机号</span>
+                        <span class="settings-item-value">138****8888 ›</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">所在城市</span>
+                        <span class="settings-item-value">上海 ›</span>
+                    </div>
+                </div>
+            `;
+            openSettingsModal('个人资料', content);
+        }
+        
+        function showNotificationSettings() {
+            const content = `
+                <div class="settings-section">
+                    <div class="settings-title">推送通知</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">新预约提醒</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">预约状态变更</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">新收藏/点赞</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">新粉丝</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">消息设置</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">系统公告</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">活动推荐</span>
+                        <span class="settings-item-value">○</span>
+                    </div>
+                </div>
+                <div style="padding: 16px; font-size: 12px; color: var(--text-secondary);">
+                    提示：关闭通知可能会错过重要预约信息
+                </div>
+            `;
+            openSettingsModal('消息通知', content);
+        }
+        
+        function showPrivacySettings() {
+            const content = `
+                <div class="settings-section">
+                    <div class="settings-title">账号隐私</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">作品集公开</span>
+                        <span class="settings-item-value">✓ 所有人可见</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">允许被搜索</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">微信号对外展示</span>
+                        <span class="settings-item-value">○ 仅预约后</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">互动设置</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">允许评论</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">允许收藏</span>
+                        <span class="settings-item-value">✓</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">黑名单</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">已屏蔽用户</span>
+                        <span class="settings-item-value">0 人 ›</span>
+                    </div>
+                </div>
+            `;
+            openSettingsModal('隐私设置', content);
+        }
+        
+        function showHelpCenter() {
+            const content = `
+                <div class="settings-section">
+                    <div class="settings-title">常见问题</div>
+                    <div class="settings-item" onclick="showToast('如何发布作品')">
+                        <span class="settings-item-text">如何发布作品？</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="showToast('如何预约摄影师')">
+                        <span class="settings-item-text">如何预约摄影师？</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="showToast('摄影师模式说明')">
+                        <span class="settings-item-text">摄影师模式有什么用？</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="showToast('预约流程说明')">
+                        <span class="settings-item-text">预约流程是怎样的？</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="showToast('如何取消预约')">
+                        <span class="settings-item-text">如何取消预约？</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">联系我们</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">客服微信</span>
+                        <span class="settings-item-value">guangying_helper</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">客服邮箱</span>
+                        <span class="settings-item-value">help@guangying.app</span>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">工作时间</span>
+                        <span class="settings-item-value">周一至周五 9:00-18:00</span>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">关于</div>
+                    <div class="settings-item">
+                        <span class="settings-item-text">版本号</span>
+                        <span class="settings-item-value">v3.1.0</span>
+                    </div>
+                    <div class="settings-item" onclick="showToast('用户协议')">
+                        <span class="settings-item-text">用户协议</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="showToast('隐私政策')">
+                        <span class="settings-item-text">隐私政策</span>
+                        <span class="menu-arrow">›</span>
+                    </div>
+                </div>
+            `;
+            openSettingsModal('帮助中心', content);
+        }
+        
+        function openSettingsModal(title, content) {
+            document.getElementById('settings-title').textContent = title;
+            document.getElementById('settings-content').innerHTML = content;
+            document.getElementById('settings-modal').classList.add('show');
+        }
+        
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('show');
+        }
+        
+        // ========== 通用功能 ==========
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
